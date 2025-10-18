@@ -10,13 +10,9 @@ import (
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 
-	"github.com/kinshuk-644/Dropbox/backend/connection" // Import database
-	"github.com/kinshuk-644/Dropbox/backend/models"     // Import models
+	"github.com/kinshuk-644/Dropbox/backend/connection"
+	"github.com/kinshuk-644/Dropbox/backend/models"
 )
-
-// --- FileMetadata struct and TableName function are REMOVED from here ---
-
-// --- API Handlers (Gin & GORM version) ---
 
 func UploadFile(c *gin.Context) {
 	file, _ := c.FormFile("file")
@@ -30,7 +26,6 @@ func UploadFile(c *gin.Context) {
 		return
 	}
 
-	// Use 'models.FileMetadata'
 	meta := models.FileMetadata{
 		Filename:     uniqueFilename,
 		OriginalName: file.Filename,
@@ -39,7 +34,6 @@ func UploadFile(c *gin.Context) {
 		UploadDate:   time.Now(),
 	}
 
-	// Use 'database.DB'
 	result := connection.DB.Create(&meta)
 	if result.Error != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save file metadata"})
@@ -50,9 +44,8 @@ func UploadFile(c *gin.Context) {
 }
 
 func GetFiles(c *gin.Context) {
-	var files []models.FileMetadata // Use 'models.FileMetadata'
+	var files []models.FileMetadata
 
-	// Use 'database.DB'
 	result := connection.DB.Order("upload_date desc").Find(&files)
 	if result.Error != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve files"})
@@ -64,9 +57,8 @@ func GetFiles(c *gin.Context) {
 
 func DownloadFile(c *gin.Context) {
 	id := c.Param("id")
-	var fileMeta models.FileMetadata // Use 'models.FileMetadata'
+	var fileMeta models.FileMetadata
 
-	// Use 'database.DB'
 	result := connection.DB.First(&fileMeta, id)
 
 	if result.Error != nil {
