@@ -73,3 +73,23 @@ func DownloadFile(c *gin.Context) {
 	filePath := filepath.Join("uploads", fileMeta.Filename)
 	c.FileAttachment(filePath, fileMeta.OriginalName)
 }
+
+func ViewFile(c *gin.Context) {
+	id := c.Param("id")
+	var fileMeta models.FileMetadata
+
+	result := connection.DB.First(&fileMeta, id)
+
+	if result.Error != nil {
+		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+			c.JSON(http.StatusNotFound, gin.H{"error": "File not found"})
+		} else {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Database error"})
+		}
+		return
+	}
+
+	filePath := filepath.Join("uploads", fileMeta.Filename)
+
+	c.File(filePath)
+}

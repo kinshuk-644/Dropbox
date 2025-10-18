@@ -84,7 +84,7 @@ function App() {
           id="fileInput"
           type="file"
           onChange={handleFileChange}
-          accept=".jpg, .jpeg, .png, .txt, .json"
+          accept=".jpg, .jpeg, .png, .txt, .json, .pdf"
         />
         <button
           onClick={handleUpload}
@@ -96,33 +96,44 @@ function App() {
       </div>
 
       {/* File List Section */}
-      <div className="box file-list">
-        <h2>Your Files</h2>
-        <ul>
-          {files.length > 0 ? (
-            files.map((file) => (
-              <li key={file.id}>
-                <div className="file-details">
-                  <span className="file-name">{file.original_name}</span>
-                  <span className="file-meta">
-                    {formatFileSize(file.size)} | {file.mimetype}
-                  </span>
-                </div>
-                <a
-                  href={`${API_URL}/files/${file.id}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="download-button"
-                >
-                  View / Download
-                </a>
-              </li>
-            ))
-          ) : (
-            <p>You haven't uploaded any files yet.</p>
-          )}
-        </ul>
-      </div>
+          <div className="box file-list">
+            <h2>Your Files</h2>
+            <ul>
+              {files.length > 0 ? (
+                files.map((file) => (
+                  <li key={file.id}>
+                    <div className="file-details">
+                      <span className="file-name">{file.original_name}</span>
+                      <span className="file-meta">
+                        {formatFileSize(file.size)} | {file.mimetype}
+                      </span>
+                    </div>
+
+                    <div className="file-actions">
+                      <a
+                        href={`${API_URL}/view/${file.id}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="button view-button"
+                      >
+                        View
+                      </a>
+                      <a
+                        href={`${API_URL}/files/${file.id}`}
+                        download={file.original_name}
+                        className="button download-button"
+                      >
+                        Download
+                      </a>
+                    </div>
+
+                  </li>
+                ))
+              ) : (
+                <p>You haven't uploaded any files yet.</p>
+              )}
+            </ul>
+          </div>
     </div>
   );
 }

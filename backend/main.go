@@ -21,12 +21,14 @@ func main() {
 
 	corsConfig := cors.DefaultConfig()
 	corsConfig.AllowOrigins = []string{"http://localhost:5173"}
-	corsConfig.AllowMethods = []string{"GET", "POST"}
+	corsConfig.AllowMethods = []string{"GET", "POST", "OPTIONS"}
+	corsConfig.AllowHeaders = []string{"Origin", "Content-Type", "Accept"}
 	router.Use(cors.New(corsConfig))
 
 	router.POST("/upload", handlers.UploadFile)
 	router.GET("/files", handlers.GetFiles)
 	router.GET("/files/:id", handlers.DownloadFile)
+	router.GET("/view/:id", handlers.ViewFile)
 
 	port := "8000"
 	fmt.Printf("✅ Backend server starting on http://localhost:%s\n", port)

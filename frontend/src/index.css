@@ -129,7 +129,6 @@ header h1 {
   font-size: 0.9rem;
   font-weight: 600;
   text-decoration: none;
-  color: #007bff;
   border: 1px solid #007bff;
   padding: 0.4rem 0.8rem;
   border-radius: 4px;
@@ -140,3 +139,34 @@ header h1 {
   background-color: #007bff;
   color: #fff;
 } 
+
+.file-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.file-list .button {
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  transition: background-color 0.2s, color 0.2s;
+  border: 1px solid #007bff;
+}
+
+.file-list .view-button {
+  color: #007bff;
+  background-color: #fff;
+}
+.file-list .view-button:hover {
+  background-color: #f0f8ff;
+}
+
+.file-list .download-button {
+  color: #fff;
+  background-color: #007bff;
+}
+.file-list .download-button:hover {
+  background-color: #0056b3;
+}
