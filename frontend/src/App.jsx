@@ -86,6 +86,7 @@ function App() {
           onChange={handleFileChange}
           accept=".jpg, .jpeg, .png, .txt, .json, .pdf"
         />
+        <p>Supported formats: jpg, jpeg, png, txt, json, pdf</p>
         <button
           onClick={handleUpload}
           disabled={!selectedFile || isLoading}
