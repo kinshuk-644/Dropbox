@@ -46,7 +46,9 @@ func UploadFile(c *gin.Context) {
 func GetFiles(c *gin.Context) {
 	var files []models.FileMetadata
 
-	result := connection.DB.Order("upload_date desc").Find(&files)
+	fileNameQuery := c.Query("fileName")
+
+	result := connection.DB.Order("upload_date desc").Where("original_name ILIKE ?", `%` + fileNameQuery + `%`).Find(&files)
 	if result.Error != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve files"})
 		return

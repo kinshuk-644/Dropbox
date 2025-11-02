@@ -18,10 +18,12 @@ function App() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [message, setMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [searchString, setSearchString] = useState('');
 
   const fetchFiles = async () => {
     try {
-      const response = await axios.get(`${API_URL}/files`);
+      const query = searchString;
+      const response = await axios.get(`${API_URL}/files?fileName=${query}`);
       setFiles(response.data || []);
     } catch (error) {
       console.error('Error fetching files:', error);
@@ -30,8 +32,13 @@ function App() {
   };
 
   useEffect(() => {
-    fetchFiles();
-  }, []);
+
+    const timer = setTimeout(() => {
+      fetchFiles();
+    }, 300);
+
+    return () => {clearTimeout(timer)}
+  }, [searchString]);
 
   const handleFileChange = (event) => {
     setSelectedFile(event.target.files[0]);
@@ -58,7 +65,7 @@ function App() {
       setMessage('File uploaded successfully!');
       setSelectedFile(null);
       document.getElementById('fileInput').value = null;
-      fetchFiles();
+      fetchFiles(searchString);
     } catch (error) {
       setMessage(error.response?.data?.error || 'Error uploading file.');
       console.error('Error uploading file:', error);
@@ -66,6 +73,10 @@ function App() {
       setIsLoading(false);
     }
   };
+
+  const handleSearchChange = async (event) => {
+    setSearchString(event.target.value);
+  }
 
   const messageClass = message.includes('success')
     ? 'message success'
@@ -76,6 +87,11 @@ function App() {
       <header>
         <h1>Mini Dropbox 📁</h1>
       </header>
+
+      <div className='searchContainer'>
+        <p>Search by File Name</p>
+        <input type="search" value={searchString} onChange={handleSearchChange}/>
+      </div>
 
       {/* Upload Section */}
       <div className="box upload-section">
